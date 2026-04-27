@@ -12,6 +12,7 @@ export const Navbar = () => {
   const { cartCount, siteContent } = useStore();
   const [isCartOpen, setIsCartOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const filteredProducts = searchQuery 
@@ -29,7 +30,7 @@ export const Navbar = () => {
       className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10 px-6 py-4 flex items-center justify-between"
     >
       <div className="flex items-center gap-8">
-        <Link href="/" className="text-2xl font-bold tracking-tighter text-white">
+        <Link href="/" className="text-xl md:text-2xl font-bold tracking-tighter text-white shrink-0">
           VOGUE<span className="text-primary">VAULT</span>
         </Link>
         
@@ -67,7 +68,10 @@ export const Navbar = () => {
         <Link href="/auth" className="p-2 hover:bg-white/5 rounded-full transition-colors">
           <User size={20} className="text-white" />
         </Link>
-        <button className="md:hidden p-2 hover:bg-white/5 rounded-full transition-colors">
+        <button 
+          onClick={() => setIsMenuOpen(true)}
+          className="md:hidden p-2 hover:bg-white/5 rounded-full transition-colors"
+        >
           <Menu size={20} className="text-white" />
         </button>
       </div>
@@ -127,6 +131,64 @@ export const Navbar = () => {
               </div>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isMenuOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md md:hidden"
+            />
+            <motion.div 
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 left-0 h-screen w-4/5 max-w-sm bg-[#050505] border-r border-white/10 z-[101] p-8 flex flex-col md:hidden shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-12">
+                <span className="text-xl font-bold tracking-tighter text-white">
+                  VOGUE<span className="text-primary">VAULT</span>
+                </span>
+                <button onClick={() => setIsMenuOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-all">
+                  <X size={24} className="text-white" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {[
+                  { name: "Boutique", href: "/" },
+                  { name: "Men", href: "/men" },
+                  { name: "Women", href: "/women" },
+                  { name: "Shoes", href: "/shoes" },
+                  { name: "Accessories", href: "/accessories" }
+                ].map((item) => (
+                  <Link 
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-2xl font-black text-white hover:text-primary transition-all uppercase tracking-tighter"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-auto pt-10 border-t border-white/5">
+                <Link 
+                  href="/auth" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-3 text-white/50 hover:text-white transition-all font-bold uppercase tracking-widest text-[10px]"
+                >
+                  <User size={16} /> Member Access
+                </Link>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
-import { StoreProvider } from "@/lib/StoreContext";
+import { Providers } from "@/components/Providers";
 
 export default function RootLayout({
   children,
@@ -24,9 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} font-sans bg-background text-foreground antialiased`}>
-        <StoreProvider>
+        <Providers>
           {children}
-        </StoreProvider>
+        </Providers>
         <script
           dangerouslySetInnerHTML={{
             __html: `

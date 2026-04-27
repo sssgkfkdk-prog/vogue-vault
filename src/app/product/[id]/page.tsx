@@ -59,7 +59,7 @@ export default function ProductDetail() {
     <main className="min-h-screen bg-[#050505] text-white pt-24 pb-20">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Back Button */}
         <button 
           onClick={() => router.back()}
@@ -69,7 +69,7 @@ export default function ProductDetail() {
           <span className="text-sm font-bold uppercase tracking-widest">Back to Gallery</span>
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 mb-12 md:mb-20">
           {/* Left: 3D Animated Image Slider */}
           <motion.div 
             initial={{ opacity: 0, rotateY: -20, scale: 0.9 }}
@@ -77,7 +77,7 @@ export default function ProductDetail() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="relative"
           >
-            <div className="rounded-[3rem] overflow-hidden bg-white/5 border border-white/10 shadow-2xl">
+            <div className="rounded-3xl md:rounded-[3rem] overflow-hidden bg-white/5 border border-white/10 shadow-2xl">
               <Swiper
                 modules={[Autoplay, Pagination]}
                 autoplay={{ delay: 3000 }}
@@ -104,12 +104,12 @@ export default function ProductDetail() {
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-6xl font-black mb-2 tracking-tighter uppercase"
+                className="text-4xl md:text-6xl font-black mb-2 tracking-tighter uppercase"
               >
                 {product.name}
               </motion.h1>
               <div className="flex items-center gap-4">
-                <p className="text-4xl font-bold text-primary">₹{product.price}</p>
+                <p className="text-3xl md:text-4xl font-bold text-primary">₹{product.price}</p>
                 <div className="flex items-center gap-1 text-yellow-500">
                   <Star size={16} fill="currentColor" />
                   <span className="text-sm font-bold">4.9 (128 reviews)</span>
@@ -138,18 +138,18 @@ export default function ProductDetail() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 pt-4">
+            <div className="flex gap-3 md:gap-4 pt-4">
               <button 
                 onClick={() => addToCart(product, selectedSize)}
-                className="flex-1 bg-primary text-black h-20 rounded-[2rem] font-black text-xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,175,55,0.2)]"
+                className="flex-1 bg-primary text-black h-16 md:h-20 rounded-2xl md:rounded-[2rem] font-black text-sm md:text-xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,175,55,0.2)]"
               >
-                <ShoppingBag size={24} /> ADD TO BAG
+                <ShoppingBag size={20} className="md:w-6 md:h-6" /> ADD TO BAG
               </button>
               <button 
                 onClick={() => toggleFavorite(product.id)}
-                className={`w-20 h-20 rounded-[2rem] border-2 flex items-center justify-center transition-all ${isFav ? 'bg-red-500 border-red-500 text-white' : 'border-white/10 hover:border-white/40'}`}
+                className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] border-2 flex items-center justify-center transition-all ${isFav ? 'bg-red-500 border-red-500 text-white' : 'border-white/10 hover:border-white/40'}`}
               >
-                <Heart size={28} fill={isFav ? "currentColor" : "none"} />
+                <Heart size={24} className="md:w-7 md:h-7" fill={isFav ? "currentColor" : "none"} />
               </button>
             </div>
 
@@ -168,15 +168,15 @@ export default function ProductDetail() {
         </div>
 
         {/* Bottom Details Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 pt-20 border-t border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 pt-12 md:pt-20 border-t border-white/10">
           <div className="space-y-6">
             <h2 className="text-3xl font-black uppercase tracking-tight">About The Product</h2>
             <p className="text-muted-foreground leading-relaxed text-lg">
               {product.about}
             </p>
-            <div className="p-8 bg-white/5 rounded-3xl border border-white/10">
-              <h3 className="font-bold mb-4 uppercase text-sm tracking-widest text-primary">Materials & Care</h3>
-              <p className="text-white font-medium">{product.materials}</p>
+            <div className="p-6 md:p-8 bg-white/5 rounded-3xl border border-white/10">
+              <h3 className="font-bold mb-4 uppercase text-[10px] md:text-sm tracking-widest text-primary">Materials & Care</h3>
+              <p className="text-sm md:text-base text-white font-medium">{product.materials}</p>
             </div>
           </div>
 
@@ -187,7 +187,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Review Form */}
-            <div className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] space-y-6">
+            <div className="p-6 md:p-8 bg-white/5 border border-white/10 rounded-3xl md:rounded-[2.5rem] space-y-6">
               <p className="text-sm font-black uppercase tracking-widest text-white/50">Write a Review</p>
               <div className="space-y-4">
                 <div className="flex gap-1">

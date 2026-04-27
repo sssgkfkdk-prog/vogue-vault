@@ -160,7 +160,7 @@ export default function AdminDashboard() {
         <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.4em]">Store Creation Terminal</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 p-1.5 bg-white/5 border border-white/10 rounded-[2.5rem] max-w-md mx-auto mb-16">
+      <div className="grid grid-cols-3 gap-2 p-1.5 bg-white/5 border border-white/10 rounded-[2.5rem] w-full max-w-sm md:max-w-md mx-auto mb-10 md:mb-16">
         {(["product", "story", "banner"] as const).map((t) => (
           <button 
             key={t}
@@ -175,9 +175,9 @@ export default function AdminDashboard() {
       <AnimatePresence mode="wait">
         {uploadSubTab === "product" && (
           <motion.div key="p-form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-2xl mx-auto space-y-8 pb-20">
-            <div className="bg-white/5 border border-white/10 rounded-[3rem] p-8 text-center border-dashed">
+            <div className="bg-white/5 border border-white/10 rounded-3xl md:rounded-[3rem] p-6 md:p-8 text-center border-dashed">
                <input id="p-upload" type="file" multiple className="hidden" onChange={handleFileChange} />
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                    {previews.map((img, i) => (
                      <div key={i} className="relative group">
                        <img src={img} className="aspect-square rounded-2xl object-cover w-full h-full" />
@@ -458,10 +458,10 @@ export default function AdminDashboard() {
         </div>
 
         <div className="space-y-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic">Live Inventory List</h3>
-            <div className="relative w-72">
-              <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search live stock..." className="w-full bg-white/5 border border-white/10 rounded-full pl-12 pr-6 py-3 text-[10px] text-white outline-none focus:border-primary transition-all" />
+            <div className="relative w-full md:w-72">
+              <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search live stock..." className="w-full bg-white/5 border border-white/10 rounded-full pl-12 pr-6 py-4 md:py-3 text-[10px] text-white outline-none focus:border-primary transition-all" />
               <Wand2 className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20" size={14} />
             </div>
           </div>
@@ -555,20 +555,19 @@ export default function AdminDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Main Switcher Toggle */}
-      <div className="flex justify-center mb-16">
-        <div className="flex bg-white/5 border border-white/10 rounded-full p-2 w-full max-w-xl">
+      <div className="flex justify-center mb-10 md:mb-16 overflow-x-auto no-scrollbar pb-4 px-2">
+        <div className="flex bg-white/5 border border-white/10 rounded-full p-1.5 w-full max-w-xl min-w-[320px]">
           {[
             { id: "upload", label: "Uploads", icon: Upload },
             { id: "orders", label: "Orders", icon: ShoppingBag },
-            { id: "inventory", label: "Stock Control", icon: ShieldCheck }
+            { id: "inventory", label: "Stock", icon: ShieldCheck }
           ].map((tab) => (
             <button 
               key={tab.id}
               onClick={() => setMainTab(tab.id as any)}
-              className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${mainTab === tab.id ? "bg-white text-black shadow-2xl scale-[1.02]" : "text-white/30 hover:text-white/50"}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 md:py-4 rounded-full font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all ${mainTab === tab.id ? "bg-white text-black shadow-2xl scale-[1.02]" : "text-white/30 hover:text-white/50"}`}
             >
-              <tab.icon size={16} /> {tab.label}
+              <tab.icon size={14} className="md:w-4 md:h-4" /> {tab.label}
             </button>
           ))}
         </div>

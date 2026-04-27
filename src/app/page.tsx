@@ -51,8 +51,8 @@ export default function Home() {
     <main className="min-h-screen pt-24 pb-12 relative overflow-hidden bg-[#050505]">
       <Navbar />
       
-      <div className="absolute top-[10%] left-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none animate-pulse" />
-      <div className="absolute bottom-[10%] right-[-10%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[150px] pointer-events-none animate-pulse delay-1000" />
+      <div className="absolute top-[10%] left-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-primary/10 rounded-full blur-[100px] md:blur-[150px] pointer-events-none animate-pulse" />
+      <div className="absolute bottom-[10%] right-[-10%] w-[250px] md:w-[500px] h-[250px] md:h-[500px] bg-accent/10 rounded-full blur-[100px] md:blur-[150px] pointer-events-none animate-pulse delay-1000" />
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
@@ -63,7 +63,7 @@ export default function Home() {
           <StoriesBar />
         </motion.div>
 
-        <motion.section initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative h-[480px] rounded-[2.5rem] overflow-hidden mb-16 shadow-2xl group">
+        <motion.section initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative h-[400px] md:h-[480px] rounded-3xl md:rounded-[2.5rem] overflow-hidden mb-12 md:mb-16 shadow-2xl group">
           <Swiper modules={[Autoplay, Pagination]} loop={banners.length > 1} pagination={{ clickable: true }} autoplay={{ delay: 4000, disableOnInteraction: false }} speed={1000} className="w-full h-full">
             {banners.map((banner) => (
               <SwiperSlide key={banner.id}>
@@ -72,13 +72,13 @@ export default function Home() {
                   <div className="absolute bottom-0 left-0 h-1.5 bg-white/10 w-full z-20">
                     <motion.div initial={{ width: "0%" }} whileInView={{ width: "100%" }} transition={{ duration: 4, ease: "linear", repeat: Infinity }} className="h-full bg-primary shadow-[0_0_20px_rgba(212,175,55,1)]" />
                   </div>
-                  <div className="absolute inset-0 flex flex-col justify-center px-16 text-left">
+                  <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 text-left">
                     <motion.span initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="text-primary font-black tracking-[0.4em] text-[10px] mb-4 uppercase">Exclusive Drop 2026</motion.span>
-                    <motion.h1 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, type: "spring" }} className="text-5xl md:text-7xl font-black text-white mb-4 leading-tight tracking-tighter uppercase">{banner.title}</motion.h1>
-                    <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.7 }} className="text-sm md:text-lg text-white/60 mb-8 max-w-xl leading-relaxed font-medium">{banner.subtitle}</motion.p>
+                    <motion.h1 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, type: "spring" }} className="text-4xl md:text-7xl font-black text-white mb-3 md:mb-4 leading-tight tracking-tighter uppercase">{banner.title}</motion.h1>
+                    <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.7 }} className="text-[10px] md:text-lg text-white/60 mb-6 md:mb-8 max-w-xl leading-relaxed font-medium">{banner.subtitle}</motion.p>
                     <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: 0.9 }}>
-                      <Link href="/new" className="flex items-center gap-3 bg-white text-black px-10 py-4 rounded-full font-black w-fit hover:bg-primary hover:scale-105 active:scale-95 transition-all shadow-2xl group/btn">
-                        {banner.buttonText} <ArrowRight size={20} className="group-hover/btn:translate-x-2 transition-transform" />
+                      <Link href="/new" className="flex items-center gap-2 md:gap-3 bg-white text-black px-8 md:px-10 py-3 md:py-4 rounded-full font-black w-fit hover:bg-primary hover:scale-105 active:scale-95 transition-all shadow-2xl group/btn text-[10px] md:text-sm">
+                        {banner.buttonText} <ArrowRight size={18} className="md:w-5 md:h-5 group-hover/btn:translate-x-2 transition-transform" />
                       </Link>
                     </motion.div>
                   </div>
@@ -90,15 +90,15 @@ export default function Home() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div>
-            <h2 className="text-4xl font-black text-white mb-2 uppercase tracking-tighter leading-none">{sections.products.title}</h2>
-            <p className="text-white/40 font-bold uppercase tracking-widest text-[10px]">{sections.products.subtitle}</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-2 uppercase tracking-tighter leading-none">{sections.products.title}</h2>
+            <p className="text-white/40 font-bold uppercase tracking-widest text-[9px] md:text-[10px]">{sections.products.subtitle}</p>
             
             <div className="flex flex-wrap gap-2 mt-8">
               {(["all", "men", "women", "limited", "accessories"] as const).map((cat) => (
                 <button 
                   key={cat} 
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${activeCategory === cat ? 'bg-primary text-black shadow-lg shadow-primary/20 scale-105' : 'bg-white/5 text-white/30 hover:text-white border border-white/5'}`}
+                  className={`px-5 md:px-6 py-2 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all ${activeCategory === cat ? 'bg-primary text-black shadow-lg shadow-primary/20 scale-105' : 'bg-white/5 text-white/30 hover:text-white border border-white/5'}`}
                 >
                   {cat}
                 </button>
@@ -153,7 +153,7 @@ export default function Home() {
           )}
         </AnimatePresence>
 
-        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           {displayProducts.map((product) => (
             <motion.div key={product.id} variants={{ hidden: { opacity: 0, y: 30, scale: 0.98 }, show: { opacity: 1, y: 0, scale: 1 } }}>
               <ProductCard id={product.id} name={product.name} price={product.price} image={product.image} expiryAt={product.expiryAt} />

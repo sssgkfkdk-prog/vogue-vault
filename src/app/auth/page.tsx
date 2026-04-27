@@ -11,11 +11,28 @@ import {
   Sparkles
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
+import { signIn } from "next-auth/react";
 
 export default function AuthPage() {
   const [method, setMethod] = useState<"initial" | "phone" | "google">("initial");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleGoogleLogin = async () => {
+    setMethod("google");
+    setIsLoading(true);
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } catch (error) {
+      console.error("Google Login Error:", error);
+      setMethod("initial");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const containerVariants = {
     initial: { opacity: 0, scale: 0.95 },
@@ -55,7 +72,7 @@ export default function AuthPage() {
 
             <div className="space-y-4">
               <button 
-                onClick={() => setMethod("google")}
+                onClick={handleGoogleLogin}
                 className="w-full py-5 bg-white text-black font-black text-sm rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -135,7 +152,9 @@ export default function AuthPage() {
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
               <Sparkles size={32} className="text-primary" />
             </div>
-            <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">Connecting Account</h2>
+            <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">
+              {isLoading ? "Connecting Account" : "Redirecting..."}
+            </h2>
             <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
               <motion.div 
                 initial={{ x: "-100%" }}
