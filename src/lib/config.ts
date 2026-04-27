@@ -1,5 +1,6 @@
 export const siteConfig = {
   name: "VOGUE VAULT",
+  admins: ["sssgkfkdk@gmail.com"],
   banners: [
     {
       id: '1',

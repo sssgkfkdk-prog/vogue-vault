@@ -23,12 +23,7 @@ export const Navbar = () => {
       )
     : [];
 
-  // Authorized Admin Emails
-  const ADMIN_EMAILS = [
-    "sssgkfkdk@gmail.com", // Placeholder: replace with your actual email
-  ];
-
-  const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email);
+  const isAdmin = session?.user?.email && siteContent.admins?.includes(session.user.email);
 
   return (
     <>

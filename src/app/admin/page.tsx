@@ -18,26 +18,49 @@ import {
   Package,
   Sparkles,
   Truck,
-  ArrowRight
+  ArrowRight,
+  User
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { useStore } from "@/lib/StoreContext";
 
 export default function AdminDashboard() {
+  const [mainTab, setMainTab] = useState<"upload" | "orders" | "inventory" | "admins">("upload");
+  const [uploadSubTab, setUploadSubTab] = useState<"product" | "story" | "banner">("product");
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
+  const [expandedItem, setExpandedItem] = useState<string | null>(null);
+
   const { 
     addProduct, removeProduct, removeProductSize,
     addStory, removeStory, 
     addBanner, removeBanner,
     orders, updateOrderStatus, shipOrder, cancelOrder,
-    siteContent 
+    siteContent, updateSiteContent
   } = useStore();
 
-  const [mainTab, setMainTab] = useState<"upload" | "orders" | "inventory">("upload");
-  const [uploadSubTab, setUploadSubTab] = useState<"product" | "story" | "banner">("product");
-  const [previews, setPreviews] = useState<string[]>([]);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const handleAddAdmin = () => {
+    if (!adminEmail || !adminEmail.includes("@")) return;
+    const currentAdmins = siteContent.admins || [];
+    if (currentAdmins.includes(adminEmail)) return;
+    
+    updateSiteContent({ admins: [...currentAdmins, adminEmail] });
+    setAdminEmail("");
+    setIsSuccess(true);
+    setTimeout(() => setIsSuccess(false), 2000);
+  };
+
+  const handleRemoveAdmin = (email: string) => {
+    // Don't allow removing the primary admin (optional but safer)
+    if (email === "sssgkfkdk@gmail.com") {
+      alert("Cannot remove primary admin.");
+      return;
+    }
+    const currentAdmins = siteContent.admins || [];
+    updateSiteContent({ admins: currentAdmins.filter(e => e !== email) });
+  };
 
   const latestOrder = orders.find(o => o.status === 'pending');
 
@@ -506,6 +529,67 @@ export default function AdminDashboard() {
   );
 
 
+  const renderAdminsMode = () => (
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700 max-w-4xl mx-auto">
+      <div className="flex flex-col items-center text-center space-y-4 mb-12">
+        <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center border border-primary/20 mb-4">
+          <ShieldCheck size={32} className="text-primary" />
+        </div>
+        <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic">Admin Access</h2>
+        <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.4em]">Manage System Privileges</p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10 space-y-8">
+        <div className="space-y-4">
+          <label className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] px-4">Add New Admin Email</label>
+          <div className="flex gap-4">
+            <input 
+              value={adminEmail} 
+              onChange={e => setAdminEmail(e.target.value)} 
+              placeholder="admin@voguevault.com" 
+              className="flex-1 bg-black border border-white/10 rounded-2xl px-8 py-5 text-lg text-white outline-none focus:border-primary transition-all" 
+            />
+            <button 
+              onClick={handleAddAdmin}
+              className="px-10 bg-primary text-black font-black text-[10px] rounded-2xl uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20"
+            >
+              Add Access
+            </button>
+          </div>
+        </div>
+
+        <div className="pt-10 border-t border-white/5 space-y-6">
+          <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Active Administrators</p>
+          <div className="grid grid-cols-1 gap-3">
+            {siteContent.admins?.map((email: string) => (
+              <div key={email} className="flex items-center justify-between p-6 bg-white/5 rounded-2xl border border-white/10 group">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+                    <User size={18} className="text-white/50" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-sm">{email}</p>
+                    {email === "sssgkfkdk@gmail.com" && (
+                      <p className="text-primary text-[8px] font-black uppercase tracking-widest">Primary Administrator</p>
+                    )}
+                  </div>
+                </div>
+                {email !== "sssgkfkdk@gmail.com" && (
+                  <button 
+                    onClick={() => handleRemoveAdmin(email)}
+                    className="p-3 text-white/10 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <main className="min-h-screen bg-[#050505] pt-12 pb-32 px-6">
       <Navbar />
@@ -556,11 +640,12 @@ export default function AdminDashboard() {
       </AnimatePresence>
 
       <div className="flex justify-center mb-10 md:mb-16 overflow-x-auto no-scrollbar pb-4 px-2">
-        <div className="flex bg-white/5 border border-white/10 rounded-full p-1.5 w-full max-w-xl min-w-[320px]">
+        <div className="flex bg-white/5 border border-white/10 rounded-full p-1.5 w-full max-w-2xl min-w-[400px]">
           {[
             { id: "upload", label: "Uploads", icon: Upload },
             { id: "orders", label: "Orders", icon: ShoppingBag },
-            { id: "inventory", label: "Stock", icon: ShieldCheck }
+            { id: "inventory", label: "Stock", icon: Package },
+            { id: "admins", label: "Admins", icon: ShieldCheck }
           ].map((tab) => (
             <button 
               key={tab.id}
@@ -588,6 +673,11 @@ export default function AdminDashboard() {
           {mainTab === "inventory" && (
             <motion.div key="inventory-tab" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
               {renderInventoryMode()}
+            </motion.div>
+          )}
+          {mainTab === "admins" && (
+            <motion.div key="admins-tab" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+              {renderAdminsMode()}
             </motion.div>
           )}
         </AnimatePresence>
