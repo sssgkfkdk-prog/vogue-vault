@@ -1,18 +1,19 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
-import { ShoppingBag, User, Search, Menu, X } from "lucide-react";
+import { ShoppingBag, User, Search, Menu, X, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
 
 import { useStore } from "@/lib/StoreContext";
 import { CartDrawer } from "./CartDrawer";
 
 export const Navbar = () => {
   const { cartCount, siteContent } = useStore();
+  const { data: session } = useSession();
   const [isCartOpen, setIsCartOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const filteredProducts = searchQuery 
@@ -65,9 +66,55 @@ export const Navbar = () => {
             </motion.span>
           )}
         </button>
-        <Link href="/auth" className="p-2 hover:bg-white/5 rounded-full transition-colors">
-          <User size={20} className="text-white" />
-        </Link>
+
+        {session ? (
+          <div className="relative">
+            <button 
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              className="flex items-center gap-2 p-1 pl-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all group"
+            >
+              <span className="hidden lg:block text-[10px] font-black uppercase tracking-widest text-white/50 group-hover:text-white">
+                {session.user?.name?.split(' ')[0]}
+              </span>
+              <div className="w-8 h-8 rounded-full border border-primary/30 overflow-hidden">
+                {session.user?.image ? (
+                  <img src={session.user.image} alt="User" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-primary flex items-center justify-center text-black font-bold">
+                    {session.user?.name?.[0]}
+                  </div>
+                )}
+              </div>
+            </button>
+            
+            <AnimatePresence>
+              {isUserMenuOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  className="absolute top-full right-0 mt-4 w-48 bg-[#0a0a0a] border border-white/10 rounded-2xl p-2 shadow-2xl backdrop-blur-3xl"
+                >
+                  <div className="p-3 border-b border-white/5 mb-2">
+                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Signed in as</p>
+                    <p className="text-xs font-bold text-white truncate mt-1">{session.user?.email}</p>
+                  </div>
+                  <button 
+                    onClick={() => signOut()}
+                    className="w-full flex items-center gap-3 p-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-all text-xs font-bold uppercase tracking-widest"
+                  >
+                    <LogOut size={16} /> Sign Out
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ) : (
+          <Link href="/auth" className="p-2 hover:bg-white/5 rounded-full transition-colors">
+            <User size={20} className="text-white" />
+          </Link>
+        )}
+
         <button 
           onClick={() => setIsMenuOpen(true)}
           className="md:hidden p-2 hover:bg-white/5 rounded-full transition-colors"
@@ -179,13 +226,31 @@ export const Navbar = () => {
               </div>
 
               <div className="mt-auto pt-10 border-t border-white/5">
-                <Link 
-                  href="/auth" 
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 text-white/50 hover:text-white transition-all font-bold uppercase tracking-widest text-[10px]"
-                >
-                  <User size={16} /> Member Access
-                </Link>
+                {session ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl">
+                      <img src={session.user?.image || ""} className="w-10 h-10 rounded-full" />
+                      <div>
+                        <p className="text-white font-bold text-sm uppercase tracking-tighter">{session.user?.name}</p>
+                        <p className="text-white/40 text-[10px] uppercase font-black">{session.user?.email}</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => signOut()}
+                      className="w-full flex items-center justify-center gap-2 p-4 bg-red-400/10 text-red-400 rounded-2xl font-black uppercase tracking-widest text-[10px]"
+                    >
+                      <LogOut size={16} /> Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <Link 
+                    href="/auth" 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-3 text-white/50 hover:text-white transition-all font-bold uppercase tracking-widest text-[10px]"
+                  >
+                    <User size={16} /> Member Access
+                  </Link>
+                )}
               </div>
             </motion.div>
           </>
