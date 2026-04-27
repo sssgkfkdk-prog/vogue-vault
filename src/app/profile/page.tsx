@@ -29,8 +29,8 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  // Filter orders by user email
-  const userOrders = orders.filter(order => !order.customerEmail || order.customerEmail === session?.user?.email);
+  // Filter orders strictly by user email
+  const userOrders = orders.filter(order => order.customerEmail === session?.user?.email);
 
   // Load from localStorage
   useEffect(() => {
