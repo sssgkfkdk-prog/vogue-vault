@@ -51,12 +51,6 @@ export default function ProfilePage() {
     setIsEditing(false);
   };
 
-  const clearAllData = () => {
-    if (confirm("Are you sure you want to clear all data? This will remove all orders and profile info.")) {
-      localStorage.clear();
-      window.location.reload();
-    }
-  };
 
   const containerVariants = {
     initial: { opacity: 0, y: 20 },
@@ -259,12 +253,9 @@ export default function ProfilePage() {
                 <h3 className="text-xs font-black uppercase tracking-widest mb-6 flex items-center gap-2">
                   <ShieldCheck size={16} className="text-primary" /> Security & Access
                 </h3>
-                <button 
-                  onClick={clearAllData}
-                  className="w-full flex items-center justify-between p-6 mt-4 bg-red-400/5 border border-red-400/10 rounded-2xl hover:bg-red-400/10 transition-all group"
-                >
-                  <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Clear All Local Data</span>
-                  <X size={16} className="text-red-400/30 group-hover:text-red-400 transition-all" />
+                <button className="w-full flex items-center justify-between p-6 bg-white/5 rounded-2xl hover:bg-white/10 transition-all group">
+                  <span className="text-[10px] font-black uppercase tracking-widest">Switch Account</span>
+                  <ChevronRight size={16} className="text-white/30 group-hover:text-primary transition-all" />
                 </button>
               </div>
             </motion.div>
