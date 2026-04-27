@@ -43,7 +43,7 @@ interface StoreContextType {
   addBanner: (banner: any) => void;
   removeBanner: (bannerId: string) => void;
   clearCart: () => void;
-  placeOrder: (customer: { name: string, phone: string, address: string }) => void;
+  placeOrder: (customer: { name: string, phone: string, address: string, email?: string }) => void;
   updateOrderStatus: (orderId: string, status: Order["status"]) => void;
   shipOrder: (orderId: string, trackingId: string) => void;
   cancelOrder: (orderId: string) => void;
