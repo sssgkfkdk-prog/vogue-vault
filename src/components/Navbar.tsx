@@ -23,10 +23,9 @@ export const Navbar = () => {
       )
     : [];
 
-  const isAdmin = session?.user?.email && (
-    session.user.email.toLowerCase().trim() === "sssgkfkdk@gmail.com" || 
-    siteContent.admins?.some(e => e.toLowerCase().trim() === session.user?.email?.toLowerCase().trim())
-  );
+  const userEmail = session?.user?.email?.toLowerCase().trim();
+  const isAdmin = userEmail === "sssgkfkdk@gmail.com" || 
+                  siteContent.admins?.some(e => e.toLowerCase().trim() === userEmail);
 
   return (
     <>
