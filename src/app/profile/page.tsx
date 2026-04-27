@@ -25,10 +25,26 @@ export default function ProfilePage() {
   const { orders } = useStore();
   const [activeTab, setActiveTab] = useState<"orders" | "settings">("orders");
   
-  // Mock local state for profile edits (since we don't have a backend database yet)
-  const [username, setUsername] = useState(session?.user?.name || "");
+  const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+
+  // Load from localStorage
+  useEffect(() => {
+    const savedName = localStorage.getItem("vogue_user_name");
+    const savedPhone = localStorage.getItem("vogue_user_phone");
+    
+    if (savedName) setUsername(savedName);
+    else if (session?.user?.name) setUsername(session.user.name);
+
+    if (savedPhone) setPhone(savedPhone);
+  }, [session]);
+
+  const saveProfile = () => {
+    localStorage.setItem("vogue_user_name", username);
+    localStorage.setItem("vogue_user_phone", phone);
+    setIsEditing(false);
+  };
 
   const containerVariants = {
     initial: { opacity: 0, y: 20 },
@@ -60,7 +76,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="text-center md:text-left flex-1">
-            <h1 className="text-4xl font-black uppercase tracking-tighter mb-2">{username || "Member"}</h1>
+            <h1 className="text-4xl font-black uppercase tracking-tighter mb-2">{username || session?.user?.name || "Member"}</h1>
             <p className="text-primary font-bold text-xs uppercase tracking-[0.3em] mb-4">Elite Status Member</p>
             <div className="flex flex-wrap justify-center md:justify-start gap-6 text-white/40 text-[10px] font-black uppercase tracking-widest">
               <span className="flex items-center gap-2"><Mail size={14} className="text-primary" /> {session?.user?.email}</span>
@@ -211,7 +227,7 @@ export default function ProfilePage() {
                   ) : (
                     <>
                       <button 
-                        onClick={() => setIsEditing(false)}
+                        onClick={saveProfile}
                         className="px-10 py-4 bg-primary text-black font-black text-[10px] rounded-2xl uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-[0_10px_30px_rgba(212,175,55,0.3)]"
                       >
                         Save Changes

@@ -68,50 +68,8 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     if (savedCart) setCart(JSON.parse(savedCart));
     if (savedFavs) setFavorites(JSON.parse(savedFavs));
     if (savedContent) setSiteContent(JSON.parse(savedContent));
-    
-    if (savedOrders) {
-      const parsedOrders = JSON.parse(savedOrders);
-      // Force 100 orders for the demo if not already there
-      if (parsedOrders.length < 100) {
-        injectDemoOrder();
-      } else {
-        setOrders(parsedOrders);
-      }
-    } else {
-      injectDemoOrder();
-    }
+    if (savedOrders) setOrders(JSON.parse(savedOrders));
   }, []);
-
-  const injectDemoOrder = () => {
-    const names = ["Rahul Malhotra", "Priya Singh", "Aryan Sharma", "Sneha Kapoor", "Vikram Rathore", "Ananya Iyer", "Karan Johar", "Ishita Patel", "Zaid Khan", "Meera Reddy", "Siddharth Malhotra", "Kriti Sanon"];
-    const statuses: Order["status"][] = ["pending", "processing", "shipped", "completed", "cancelled"];
-    const cities = ["Mumbai", "Delhi", "Bangalore", "Pune", "Hyderabad", "Chennai", "Kolkata", "Ahmedabad"];
-    
-    const dummyOrders: Order[] = Array.from({ length: 100 }).map((_, i) => {
-      const status = statuses[Math.floor(Math.random() * statuses.length)];
-      return {
-        id: `ORD-VAULT-${1000 - i}`,
-        customerName: names[Math.floor(Math.random() * names.length)],
-        phone: `+91 ${7000000000 + Math.floor(Math.random() * 2999999999)}`,
-        address: `Apt ${100 + i}, ${cities[Math.floor(Math.random() * cities.length)]} Residency, Sector ${Math.floor(Math.random() * 50)}`,
-        items: [{
-          id: `p-${i % 10}`,
-          name: i % 2 === 0 ? "Signature Elite Tee" : "Vault Limited Hoodie",
-          price: 2499 + Math.floor(Math.random() * 5000),
-          image: i % 2 === 0 
-            ? "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000&auto=format&fit=crop"
-            : "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000&auto=format&fit=crop",
-          quantity: 1,
-          size: ["S", "M", "L", "XL"][Math.floor(Math.random() * 4)]
-        }],
-        total: 2499 + Math.floor(Math.random() * 5000),
-        status: status,
-        date: new Date(Date.now() - (Math.floor(Math.random() * 90) * 3600000 * 24)).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-      };
-    });
-
-    setOrders(dummyOrders);
-  };
 
   // Save to localStorage on change
   useEffect(() => {
