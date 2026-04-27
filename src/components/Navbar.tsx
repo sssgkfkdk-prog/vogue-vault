@@ -99,6 +99,13 @@ export const Navbar = () => {
                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Signed in as</p>
                     <p className="text-xs font-bold text-white truncate mt-1">{session.user?.email}</p>
                   </div>
+                  <Link 
+                    href="/profile"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="w-full flex items-center gap-3 p-3 text-white hover:bg-white/10 rounded-xl transition-all text-xs font-bold uppercase tracking-widest"
+                  >
+                    <User size={16} className="text-primary" /> My Profile
+                  </Link>
                   <button 
                     onClick={() => signOut()}
                     className="w-full flex items-center gap-3 p-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-all text-xs font-bold uppercase tracking-widest"
@@ -228,13 +235,17 @@ export const Navbar = () => {
               <div className="mt-auto pt-10 border-t border-white/5">
                 {session ? (
                   <div className="space-y-4">
-                    <div className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl">
+                    <Link 
+                      href="/profile"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-all"
+                    >
                       <img src={session.user?.image || ""} className="w-10 h-10 rounded-full" />
                       <div>
                         <p className="text-white font-bold text-sm uppercase tracking-tighter">{session.user?.name}</p>
-                        <p className="text-white/40 text-[10px] uppercase font-black">{session.user?.email}</p>
+                        <p className="text-primary text-[8px] uppercase font-black tracking-widest">View Profile</p>
                       </div>
-                    </div>
+                    </Link>
                     <button 
                       onClick={() => signOut()}
                       className="w-full flex items-center justify-center gap-2 p-4 bg-red-400/10 text-red-400 rounded-2xl font-black uppercase tracking-widest text-[10px]"
