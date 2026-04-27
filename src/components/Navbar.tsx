@@ -23,7 +23,10 @@ export const Navbar = () => {
       )
     : [];
 
-  const isAdmin = session?.user?.email && siteContent.admins?.includes(session.user.email);
+  const isAdmin = session?.user?.email && (
+    session.user.email === "sssgkfkdk@gmail.com" || 
+    siteContent.admins?.includes(session.user.email)
+  );
 
   return (
     <>

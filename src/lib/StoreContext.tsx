@@ -68,7 +68,13 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     
     if (savedCart) setCart(JSON.parse(savedCart));
     if (savedFavs) setFavorites(JSON.parse(savedFavs));
-    if (savedContent) setSiteContent(JSON.parse(savedContent));
+    if (savedContent) {
+      const parsed = JSON.parse(savedContent);
+      setSiteContent({
+        ...parsed,
+        admins: Array.from(new Set([...(initialConfig.admins || []), ...(parsed.admins || [])]))
+      });
+    }
     if (savedOrders) setOrders(JSON.parse(savedOrders));
   }, []);
 
