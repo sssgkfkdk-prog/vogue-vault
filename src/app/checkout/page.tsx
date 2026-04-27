@@ -15,11 +15,13 @@ import {
 import Link from "next/link";
 import { useStore } from "@/lib/StoreContext";
 import { Navbar } from "@/components/Navbar";
+import { useSession } from "next-auth/react";
 
 export default function CheckoutPage() {
+  const { data: session } = useSession();
   const { cart, placeOrder } = useStore();
   const [step, setStep] = useState(0); // 0: Auth, 1: Shipping, 2: Payment, 3: Success
-  const [name, setName] = useState("");
+  const [name, setName] = useState(session?.user?.name || "");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [orderId, setOrderId] = useState("");
@@ -30,7 +32,7 @@ export default function CheckoutPage() {
 
   const handleCompleteOrder = () => {
     const id = `ORD-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-    placeOrder({ name, phone, address });
+    placeOrder({ name, phone, address, email: session?.user?.email || undefined });
     setOrderId(id);
     setStep(3);
   };

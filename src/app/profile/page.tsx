@@ -29,10 +29,13 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
+  // Filter orders by user email
+  const userOrders = orders.filter(order => !order.customerEmail || order.customerEmail === session?.user?.email);
+
   // Load from localStorage
   useEffect(() => {
-    const savedName = localStorage.getItem("vogue_user_name");
-    const savedPhone = localStorage.getItem("vogue_user_phone");
+    const savedName = localStorage.getItem(`vogue_name_${session?.user?.email}`);
+    const savedPhone = localStorage.getItem(`vogue_phone_${session?.user?.email}`);
     
     if (savedName) setUsername(savedName);
     else if (session?.user?.name) setUsername(session.user.name);
@@ -41,9 +44,18 @@ export default function ProfilePage() {
   }, [session]);
 
   const saveProfile = () => {
-    localStorage.setItem("vogue_user_name", username);
-    localStorage.setItem("vogue_user_phone", phone);
+    if (session?.user?.email) {
+      localStorage.setItem(`vogue_name_${session.user.email}`, username);
+      localStorage.setItem(`vogue_phone_${session.user.email}`, phone);
+    }
     setIsEditing(false);
+  };
+
+  const clearAllData = () => {
+    if (confirm("Are you sure you want to clear all data? This will remove all orders and profile info.")) {
+      localStorage.clear();
+      window.location.reload();
+    }
   };
 
   const containerVariants = {
@@ -100,7 +112,7 @@ export default function ProfilePage() {
             onClick={() => setActiveTab("orders")}
             className={`px-8 py-4 rounded-2xl flex items-center gap-3 transition-all text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap ${activeTab === 'orders' ? 'bg-primary text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}
           >
-            <Package size={16} /> Order History ({orders.length})
+            <Package size={16} /> Order History ({userOrders.length})
           </button>
           <button 
             onClick={() => setActiveTab("settings")}
@@ -119,8 +131,8 @@ export default function ProfilePage() {
               exit={{ opacity: 0, x: 20 }}
               className="space-y-6"
             >
-              {orders.length > 0 ? (
-                orders.map((order) => (
+              {userOrders.length > 0 ? (
+                userOrders.map((order) => (
                   <div key={order.id} className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 hover:bg-white/10 transition-all group">
                     <div className="flex flex-col lg:flex-row justify-between gap-6">
                       <div className="flex gap-6">
@@ -247,9 +259,12 @@ export default function ProfilePage() {
                 <h3 className="text-xs font-black uppercase tracking-widest mb-6 flex items-center gap-2">
                   <ShieldCheck size={16} className="text-primary" /> Security & Access
                 </h3>
-                <button className="w-full flex items-center justify-between p-6 bg-white/5 rounded-2xl hover:bg-white/10 transition-all group">
-                  <span className="text-[10px] font-black uppercase tracking-widest">Switch Account</span>
-                  <ChevronRight size={16} className="text-white/30 group-hover:text-primary transition-all" />
+                <button 
+                  onClick={clearAllData}
+                  className="w-full flex items-center justify-between p-6 mt-4 bg-red-400/5 border border-red-400/10 rounded-2xl hover:bg-red-400/10 transition-all group"
+                >
+                  <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Clear All Local Data</span>
+                  <X size={16} className="text-red-400/30 group-hover:text-red-400 transition-all" />
                 </button>
               </div>
             </motion.div>

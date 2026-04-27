@@ -15,6 +15,7 @@ interface CartItem {
 export interface Order {
   id: string;
   customerName: string;
+  customerEmail?: string;
   phone: string;
   address: string;
   items: CartItem[];
@@ -204,11 +205,12 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = () => setCart([]);
 
-  const placeOrder = (customer: { name: string, phone: string, address: string }) => {
+  const placeOrder = (customer: { name: string, phone: string, address: string, email?: string }) => {
     const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     const newOrder: Order = {
       id: `ORD-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
       customerName: customer.name,
+      customerEmail: customer.email, // Link order to email
       phone: customer.phone,
       address: customer.address,
       items: [...cart],
