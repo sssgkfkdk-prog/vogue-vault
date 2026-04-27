@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ShoppingBag, User, Search, Menu, X, LogOut } from "lucide-react";
+import { ShoppingBag, User, Search, Menu, X, LogOut, LayoutDashboard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 
@@ -22,6 +22,13 @@ export const Navbar = () => {
         p.category.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : [];
+
+  // Authorized Admin Emails
+  const ADMIN_EMAILS = [
+    "sssgkfkdk@gmail.com", // Placeholder: replace with your actual email
+  ];
+
+  const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email);
 
   return (
     <>
@@ -106,6 +113,16 @@ export const Navbar = () => {
                   >
                     <User size={16} className="text-primary" /> My Profile
                   </Link>
+
+                  {isAdmin && (
+                    <Link 
+                      href="/admin"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="w-full flex items-center gap-3 p-3 text-primary bg-primary/5 hover:bg-primary/10 border border-primary/10 rounded-xl transition-all text-xs font-bold uppercase tracking-widest"
+                    >
+                      <LayoutDashboard size={16} /> Admin Dashboard
+                    </Link>
+                  )}
                   <button 
                     onClick={() => signOut()}
                     className="w-full flex items-center gap-3 p-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-all text-xs font-bold uppercase tracking-widest"
@@ -246,6 +263,16 @@ export const Navbar = () => {
                         <p className="text-primary text-[8px] uppercase font-black tracking-widest">View Profile</p>
                       </div>
                     </Link>
+
+                    {isAdmin && (
+                      <Link 
+                        href="/admin"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="w-full flex items-center gap-3 p-4 bg-primary text-black rounded-2xl font-black uppercase tracking-widest text-[10px]"
+                      >
+                        <LayoutDashboard size={18} /> Admin Control Panel
+                      </Link>
+                    )}
                     <button 
                       onClick={() => signOut()}
                       className="w-full flex items-center justify-center gap-2 p-4 bg-red-400/10 text-red-400 rounded-2xl font-black uppercase tracking-widest text-[10px]"
